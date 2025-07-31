@@ -41,7 +41,7 @@ GOOGLE_MAPS_OBLIQUE_VERSION_FALLBACK = '163'
 
 USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15"
 
-LOGGER = None
+LOGGER = logging.getLogger(__name__)
 VERBOSITY = None
 
 
@@ -1068,6 +1068,7 @@ def main():
     parser.add_argument('--image_width', dest='image_width', metavar='N', type=float, help='width of the result image, will override your configuration (where you can also find an explanation of how this option interacts with the -m, -w, and -h options)')
     parser.add_argument('--image_height', dest='image_height', metavar='N', type=float, help='height of the result image, will override your configuration (where you can also find an explanation of how this option interacts with the -m, -w, and -h options)')
     parser.add_argument('--direction', dest='direction_cli', type=str, choices=["northward", "eastward", "southward", "westward"], help='view direction (only applicable if the "googlemaps-oblique-random" tile url preset is selected in the config file; overrides the randomization)')
+    parser.add_argument('--shapefile', dest='shapefile', type=str, help='shapefile to use, will override your configuration')
     args = parser.parse_args()
 
     # load configuration either from config.ini or from user-supplied files
@@ -1106,7 +1107,7 @@ def main():
 
     tile_url_template = config['GEOGRAPHY']['tile_url_template']
 
-    shapefile = config['GEOGRAPHY']['shapefile']
+    shapefile = args.shapefile if args.shapefile else config['GEOGRAPHY']['shapefile']
     exclude_shapefile = config['GEOGRAPHY']['exclude_shapefile']
     point = config['GEOGRAPHY']['point']
 
